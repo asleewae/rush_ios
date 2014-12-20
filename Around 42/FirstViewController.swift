@@ -33,18 +33,32 @@ class FirstViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     }
     
     @IBAction func findMyLocation(sender: UIButton) {
-//        println("test")
-//        mapView.showUserLocation = true
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLDistanceFilterNone
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.startUpdatingLocation()
+        }
+        let location = CLLocationCoordinate2D(
+            latitude: self.locationManager.location.coordinate.latitude,
+            longitude: self.locationManager.location.coordinate.longitude
+        )
+        let span = MKCoordinateSpanMake(0.005, 0.005)
+        let region = MKCoordinateRegion(center: location, span: span)
+        
+        mapView.setRegion(region, animated: true)
     }
     
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        //        println("\(locations.last)")
-    }
+    //func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+    //    println("\(locations.last)")
+    //}
     
-    func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        //        locationManager.startUpdatingLocation()
-        println("Change authorization")
-    }
+    //func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    //    locationManager.startUpdatingLocation()
+    //    println("Change authorization")
+    //}
     
     func locationManager(manager: CLLocationManager!, didFailWithError
         error: NSError!) {
@@ -62,6 +76,8 @@ class FirstViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         let span = MKCoordinateSpanMake(0.005, 0.005)
         let region = MKCoordinateRegion(center: location, span: span)
         
+        mapView.mapType = MKMapType.Satellite
+        mapType.selectedSegmentIndex == 1
         mapView.setRegion(region, animated: true)
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -74,7 +90,7 @@ class FirstViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         annotation.title = "42"
         annotation.subtitle = "Don't Panic"
         mapView.addAnnotation(annotation)
-        
+        /*
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
@@ -83,66 +99,12 @@ class FirstViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         if CLLocationManager.locationServicesEnabled() {
             locationManager.startUpdatingLocation()
         }
+        */
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-//    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-//        CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: {(placemarks, error)->Void in
-//            
-//            if (error != nil) {
-//                println("Reverse geocoder failed with error" + error.localizedDescription)
-//                return
-//            }
-//            
-//            if placemarks.count > 0 {
-//                let pm = placemarks[0] as CLPlacemark
-//                self.displayLocationInfo(pm)
-//            } else {
-//                println("Problem with the data received from geocoder")
-//            }
-//        })
-//    }
-//    
-//    func displayLocationInfo(placemark: CLPlacemark?) {
-//        if let containsPlacemark = placemark {
-//            locationManager.stopUpdatingLocation()
-//            var annotation2 = MKPointAnnotation()
-//            mapView.removeAnnotations(mapView.annotations)
-//            let locality = (containsPlacemark.locality != nil) ? containsPlacemark.locality : ""
-//            let postalCode = (containsPlacemark.postalCode != nil) ? containsPlacemark.postalCode : ""
-//            let administrativeArea = (containsPlacemark.administrativeArea != nil) ? containsPlacemark.administrativeArea : ""
-//            let country = (containsPlacemark.country != nil) ? containsPlacemark.country : ""
-//            println(locality)
-//            println(postalCode)
-//            println(administrativeArea)
-//            println(country)
-//            var centerLocation2 = CLLocationCoordinate2DMake(containsPlacemark.location.coordinate.latitude, containsPlacemark.location.coordinate.longitude)
-//            
-//            var mapSpan2 = MKCoordinateSpanMake(0.003, 0.003)
-//            
-//            var mapRegion2 = MKCoordinateRegionMake(centerLocation2, mapSpan2)
-//            
-//            self.mapView.setRegion(mapRegion2, animated: true)
-//            
-//            annotation2.coordinate = centerLocation2
-//            annotation2.title = locality
-//            annotation2.subtitle = postalCode + " " + administrativeArea + " " + country
-//            self.mapView.addAnnotation(annotation2)
-//        }
-//    }
-//    
-    
-//    
-//    @IBAction func findMyLocation(sender: UIButton) {
-//        locationManager.delegate = self
-//        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-//        locationManager.requestWhenInUseAuthorization()
-//        locationManager.startUpdatingLocation()
-//    }
-
-
 }
 
